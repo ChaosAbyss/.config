@@ -1,0 +1,288 @@
+# vim: filetype=i3
+
+
+# This config file will use environmental variables such as $BROWSER and $TERMINAL.
+# You can set these variables in ~/.profile or ~/.bash_profile if you have it as below:
+
+
+# #---Basic Definitions---# #
+set $inner_gaps 8
+set $outer_gaps 8
+
+set $term --no-startup-id $TERMINAL
+set $alac --no-startup-id alacritty -t 'alacritty-floating'
+          for_window [title="^alacritty-floating$"] floating enable, move position center
+set $mod Mod4
+set $hibernate systemctl suspend
+set $shutdown shutdown -h now
+set $reboot reboot
+set $netrefresh --no-startup-id sudo -A systemctl restart NetworkManager
+set $wallpaper_path /home/user/Downloads/Wallpapers/8_bit_island.jpg
+
+# Colors
+set_from_resource $bg background
+set_from_resource $fg foreground
+
+set_from_resource $white color0
+set_from_resource $red color1
+set_from_resource $orange color2
+set_from_resource $yellow color3
+set_from_resource $green color4
+set_from_resource $cyan color5
+set_from_resource $blue color6
+set_from_resource $magenta color7
+set_from_resource $gray color8
+set_from_resource $black color9
+
+# System colors
+# class                     border    bcgr    text      indicator
+client.focused              $green    $green  $green    $green
+client.focused_inactive     $green    $green  $green    $green
+client.unfocused            $gray     $gray   $gray     $gray
+client.urgent               $red      $red    $red      $gray
+
+# Wallpaper setting
+exec_always feh --bg-scale $wallpaper_path
+
+# #--- Keyboard layouts ---# #
+exec_always "setxkbmap -model pc105 -layout us,ru -option grp:caps_toggle"
+
+# Battery popup
+exec --no-startup-id i3-battery-popup -n -L 20 -l 15 -t 60s
+
+# Font setting
+font pango:Hack Nerd Font 10
+
+# Gaps
+for_window [class="^.*"] border pixel 3
+gaps inner $inner_gaps
+gaps outer $outer_gaps
+
+
+# #---Dropdown Windows---# #
+# General dropdown window traits. The order can matter.
+for_window [instance="dropdown_*"] floating enable
+for_window [instance="dropdown_*"] move scratchpad
+for_window [instance="dropdown_*"] sticky enable
+for_window [instance="dropdown_*"] scratchpad show
+for_window [instance="dropdown_*"] move position center
+
+# Polybar
+exec_always --no-startup-id $HOME/.config/polybar/scripts/launch.sh
+
+# i3 status_bar
+#bar {
+    #font xft:Cousine, FontAwesome 10
+    #status_command i3blocks
+    #position top
+	#mode dock
+	#modifier None
+
+    #colors {
+        #separator              #268bd2
+        #background             #919191
+        #statusline             #839496
+        #focused_workspace      #fdf6e3 #003eb0 #fdf6e3
+        #active_workspace       #fdf6e3 #003eb0 #fdf6e3
+        #inactive_workspace     #002b36 #586e75 #002b36
+        #urgent_workspace       #960000 #960000 #fdf6e3
+            #}
+    #}
+
+
+# #---Basic Bindings---# #
+bindsym $mod+Return                     exec $term
+bindsym $mod+Shift+Return               exec $alac
+
+bindsym $mod+space		                focus mode_toggle
+bindsym $mod+Shift+space 	            floating toggle
+
+bindsym $mod+Escape		                workspace prev
+bindsym $mod+Shift+Escape               exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
+
+bindsym $mod+grave                      workspace next
+# bindsym $mod+Shift+grave
+
+# bindsym $mod+BackSpace
+bindsym $mod+Shift+BackSpace	        exec $reboot
+
+# #---Letter Key Bindings---# #
+bindsym $mod+q                          kill
+# bindsym $mod+Shift+q
+
+bindsym $mod+w			                exec --no-startup-id $BROWSER
+bindsym $mod+Shift+w		            exec $term -e nmtui
+
+# bindsym $mod+e
+bindsym $mod+Shift+e                    reload
+
+bindsym $mod+r                          exec rofi -show run
+bindsym $mod+Shift+r                    restart
+
+bindsym $mod+t			                split toggle
+bindsym $mod+Shift+t		            gaps inner current set $inner_gaps; gaps outer current set $outer_gaps
+
+bindsym $mod+y		                	exec $term -e calcurse
+# bindsym $mod+Shift+y
+
+# bindsym $mod+u
+# bindsym $mod+Shift+u
+
+bindsym $mod+i 			                exec $term -e htop
+# bindsym $mod+Shift+i
+
+bindsym $mod+o			                sticky toggle
+# bindsym $mod+Shift+o
+
+# bindsym $mod+p
+# bindsym $mod+Shift+p
+
+bindsym $mod+a                          exec --no-startup-id telegram-desktop
+bindsym $mod+Shift+a                    exec --no-startup-id spotify
+
+bindsym $mod+s                          exec systemsettings5
+# bindsym $mod+Shift+s
+
+bindsym $mod+d                          exec dmenu_run -b -nb '$black' -sb '$yellow' -nf '$white' -sf '$white' -fn 'pango:Inconsolata 16'
+bindsym $mod+Shift+d		            gaps inner current set 0; gaps outer current set 0
+
+bindsym $mod+f			                fullscreen toggle
+bindsym $mod+Shift+f                    exec gnome-font-viewer
+
+# bindsym $mod+g
+# bindsym $mod+Shift+g
+
+bindsym $mod+h			                focus left
+# bindsym $mod+Shift+h
+
+bindsym $mod+j		                	focus down
+# bindsym $mod+Shift+j
+
+bindsym $mod+k			                focus up
+# bindsym $mod+Shift+k
+
+bindsym $mod+l			                focus right
+bindsym $mod+Shift+l                    mode "resize"
+
+bindsym $mod+z                          exec $alac -e alsamixer
+bindsym $mod+Shift+z		            gaps outer current minus 5
+
+bindsym $mod+x 		                    exec $hibernate
+bindsym $mod+Shift+x		            exec $shutdown
+
+bindsym $mod+c                          exec code
+# bindsym $mod+Shift+c
+
+bindsym $mod+v			                exec --no-startup-id $term -e $EDITOR
+# bindsym $mod+Shift+v
+
+bindsym $mod+b                          exec blueberry
+# bindsym $mod+Shift+b
+
+# bindsym $mod+n
+# bindsym $mod+Shift+n
+
+bindsym $mod+m                          exec $term -e ranger
+# bindsym $mod+Shift+m
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym h resize shrink width   15 px
+        bindsym j resize grow height    15 px
+        bindsym k resize shrink height  15 px
+        bindsym l resize grow width     15 px
+
+        bindsym Left resize shrink width 15 px
+        bindsym Down resize grow height  15 px
+        bindsym Up resize shrink height  15 px
+        bindsym Right resize grow width  15 px
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# #---Workspace Bindings---# #
+bindsym $mod+Tab		                workspace back_and_forth
+# bindsym $mod+semicolon
+# bindsym $mod+apostrophe
+# bindsym $mod+slash
+# bindsym $mod+backslash
+
+# define workspaces
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1		workspace $ws1
+bindsym $mod+2		workspace $ws2
+bindsym $mod+3		workspace $ws3
+bindsym $mod+4		workspace $ws4
+bindsym $mod+5		workspace $ws5
+bindsym $mod+6		workspace $ws6
+bindsym $mod+7		workspace $ws7
+bindsym $mod+8		workspace $ws8
+bindsym $mod+9		workspace $ws9
+bindsym $mod+0		workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1	move container to workspace $ws1
+bindsym $mod+Shift+2	move container to workspace $ws2
+bindsym $mod+Shift+3	move container to workspace $ws3
+bindsym $mod+Shift+4	move container to workspace $ws4
+bindsym $mod+Shift+5	move container to workspace $ws5
+bindsym $mod+Shift+6	move container to workspace $ws6
+
+bindsym $mod+Shift+7	move container to workspace $ws7
+bindsym $mod+Shift+8	move container to workspace $ws8
+bindsym $mod+Shift+9	move container to workspace $ws9
+bindsym $mod+Shift+0	move container to workspace $ws10
+
+
+# #---Function Buttons---# #
+# bindsym $mod+F1     exec i3lock -c 000000*/
+bindsym $mod+F2		restart
+# bindsym $mod+F3
+# bindsym $mod+F4
+# bindsym $mod+F5
+# bindsym $mod+F6
+# bindsym $mod+F7
+# bindsym $mod+F8
+# bindsym $mod+F9
+# bindsym $mod+F10
+# bindsym $mod+F11
+# bindsym $mod+F12
+
+
+# #---Arrow Keys---# #
+bindsym $mod+Left		    focus left
+bindsym $mod+Shift+Left		move left
+bindsym $mod+Down		    focus down
+bindsym $mod+Shift+Down		move down
+bindsym $mod+Up			    focus up
+bindsym $mod+Shift+Up		move up
+bindsym $mod+Right 		    focus right
+bindsym $mod+Shift+Right 	move right
+
+
+# #---Volume Keys---# #
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute     exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+
+# #---Extra XF86 Keys---# #
+bindsym Print       exec flameshot full -p ~/Pictures/Screenshots/
+bindsym Shift+Print exec flameshot gui
+bindsym XF86MonBrightnessUp   exec "light -A 5
+bindsym XF86MonBrightnessDown exec "light -U 5
+

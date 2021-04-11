@@ -1,0 +1,54 @@
+colors:
+
+  # Default colors
+  primary:
+    background: '#202020'
+    foreground: '#e6e6e6'
+
+  # Normal colors
+  normal:
+    white:   '#fbf1c7'
+    red:     '#eb4949'
+    yellow:  '#d79921'
+    green:   '#b8bb26'
+    cyan:    '#148280'
+    blue:    '#195fa6'
+    magenta: '#d3869b'
+    black:   '#171717'
+
+  # Bright colors
+  bright:
+    white:   '#fbf1c7'
+    red:     '#fb4934'
+    yellow:  '#fabd2f'
+    green:   '#b8bb26'
+    cyan:    '#53c2db'
+    blue:    '#5576d9'
+    magenta: '#b16286'
+    black:   '#7c6f64'
+
+font:
+  size: 10.0
+  normal:
+    # Acceptable: Roboto Mono Nerd Font
+    family: "JetBrains Mono Nerd Font"
+    style: Regular
+
+  bold:
+    family: "JetBrains Mono Nerd Font"
+    style: Bold
+
+  italic:
+    family: "JetBrains Mono Nerd Font"
+    style: Italic
+
+  bold_italic:
+    family: "JetBrains Mono Nerd Font"
+    style: Bold Italic
+
+# key_bindings
+key_bindings:
+    - { key: K, mods: Control, action: ScrollLineUp }
+    - { key: J, mods: Control, action: ScrollLineDown }
+
+background_opacity: 0.90
